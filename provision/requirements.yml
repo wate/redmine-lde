@@ -1,0 +1,18 @@
+- src: https://github.com/wate/ansible-role-common
+  version: develop
+  name: common
+- src: https://github.com/wate/ansible-role-nginx.git
+  version: develop
+  name: nginx
+- src: https://github.com/wate/ansible-role-mariadb.git
+  version: develop
+  name: mariadb
+- src: https://github.com/wate/ansible-role-redmine.git
+  version: develop
+  name: redmine
+# - src: https://github.com/wate/ansible-role-nodejs.git
+#   version: develop
+#   name: nodejs
+# - src: https://github.com/wate/ansible-role-tools.git
+#   version: develop
+#   name: tools

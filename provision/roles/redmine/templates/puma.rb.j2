@@ -1,0 +1,9 @@
+#!/usr/bin/env puma
+
+app_root = '{{ redmine_home }}'
+environment '{{ redmine_mode }}'
+
+directory app_root
+pidfile "#{app_root}/tmp/puma.pid"
+state_path "#{app_root}/tmp/puma.state"
+{{ redmine_puma_extra_cfg }}

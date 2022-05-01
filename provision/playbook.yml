@@ -1,0 +1,19 @@
+- name: Deploy Redmine
+  hosts: all
+  roles:
+    - name: common
+    - name: mariadb
+    - name: nginx
+  tasks:
+    - name: install ruby packages
+      apt:
+        name:
+          - ruby
+          - rubygems-integration
+          - ruby-rmagick
+          - libmagickcore-dev
+          - bundler
+    - name: 
+      copy:
+        src: Grmfile.local
+        dest: /vagrant/redmine/Grmfile.local
