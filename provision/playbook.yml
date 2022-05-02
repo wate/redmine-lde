@@ -34,6 +34,10 @@
             src: configuration.yml.j2
             dest: "{{ redmine_home }}/config/configuration.yml"
             mode: "0644"
+        - name: execute bundle update
+          command: bundle update
+          args:
+            chdir: "{{ redmine_home }}"
         - name: execute bundle install
           command: bundle install
           args:
