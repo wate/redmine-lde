@@ -90,17 +90,18 @@ git diff > change_files.patch
 
 ### データベース情報
 
+Redmineのデータベース情報は以下の通りです
+
+* ホスト名：:`localhost`
 * データベース名：`redmine`
 * ユーザー名：`redmine_user`
 * パスワード：`redmine_password`
 
-### データベース情報
+### メール送信のテスト
+
+メールの送信テストを可能にするために[MailHog][]をインストールしています。  
+[MailHog][]の画面には以下のURLよりアクセスできます。
 
 http://localhost:8025/
 
-
-参考URL
------------------------
-
-* [Ruby for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
-* [Debugger](https://github.com/rubyide/vscode-ruby/blob/main/docs/debugger.md)
+[MailHog](https://github.com/mailhog/MailHog)
