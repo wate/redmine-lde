@@ -52,7 +52,13 @@ vagrant up
 vagrant ssh
 ```
 
-仮想マシン内で以下のコマンドを実行しrdebug-ideを使ってRedmineを起動します
+仮想マシンにログインし以下のコマンドを実行します。
+
+```
+launch_rdebug-ide
+```
+
+または、
 
 ```
 cd /vagrant/redmine
@@ -61,6 +67,9 @@ bundle exec rdebug-ide --host 0.0.0.0 --port 1234 -- bin/rails server -b 0.0.0.0
 
 ### 4. デバッガーを開始します。
 
+以下のURLを参考にVSCodeのデバッガを起動します。  
+
+※デバッガに`Listen for rdebug-ide`が選択されていることを確認してください。
 
 ### 5. ステップ実行する
 
@@ -96,6 +105,12 @@ Redmineのデータベース情報は以下の通りです
 * データベース名：`redmine`
 * ユーザー名：`redmine_user`
 * パスワード：`redmine_password`
+* ポート：`3306`
+
+#### 補足事項
+
+Vagrantの[ポートフォワーディング機能](https://www.vagrantup.com/docs/networking/forwarded_ports)を設定を行っているため、
+ホストマシンから上記の接続情報を利用し仮想マシンのデータベースに接続できます。
 
 ### メール送信のテスト
 
@@ -104,4 +119,4 @@ Redmineのデータベース情報は以下の通りです
 
 http://localhost:8025/
 
-[MailHog](https://github.com/mailhog/MailHog)
+[MailHog]: https://github.com/mailhog/MailHog
