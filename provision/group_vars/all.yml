@@ -6,6 +6,14 @@ redmine_cfg:
         location: /usr/local/bin/mhsendmail
         arguments: ''
 
+mariadb_databases:
+  - name: redmine_test
+    hosts:
+      - "127.0.0.1"
+      - localhost
+    user: redmine_test_user
+    password: redmine_test_password
+
 redmine_db_cfg:
   production:
     adapter: mysql2
@@ -20,6 +28,13 @@ redmine_db_cfg:
     host: localhost
     username: redmine_user
     password: redmine_password
+    encoding: utf8mb4
+  test:
+    adapter: mysql2
+    database: redmine_test
+    host: localhost
+    username: redmine_test_user
+    password: redmine_test_password
     encoding: utf8mb4
 
 mariadb_mysqld_cfg:
