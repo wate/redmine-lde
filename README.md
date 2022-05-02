@@ -1,8 +1,10 @@
-redmine-lde
+Redmineローカル開発環境
 ======================
 
 必要なもの
 -------------------
+
+このローカル開発環境を利用するには、以下のアプリケーションが必要になります。
 
 * [Vagrant](https://www.vagrantup.com/)
 * [VirtualBox](https://www.virtualbox.org/)
@@ -18,14 +20,14 @@ redmine-lde
 * `${LDE_ROOT}`：本リポジトリをcloneした直下のディレクトリを表しています
 * `${REDMINE_ROOT}`： cloneしたRedmineのルートディレクトリを表しています。
 
-### 1. Redmineのソースコードを取得
+### 1. Redmineのソースコードを取得します
 
 ```
 cd ${LDE_ROOT}
 git clone https://github.com/redmine/redmine.git
 ```
 
-#### Redmineのバージョンを切り替える
+#### Redmineバージョンの切り替方法
 
 以下のコマンドを実行し対応するバージョンのブランチに切り替えます。
 ※以下のコマンドでは`4.2`に切り替えを行っています
@@ -65,7 +67,7 @@ bundle exec rdebug-ide --host 0.0.0.0 --port 1234 -- bin/rails server -b 0.0.0.0
 
 ### 4. デバッガーを開始します。
 
-以下のURLを参考にVSCodeのデバッガを起動します。  
+VSCodeのデバッガを起動します。  
 
 ※デバッガに`Listen for rdebug-ide`が選択されていることを確認してください。
 
