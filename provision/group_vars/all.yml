@@ -20,3 +20,9 @@ redmine_db_cfg:
     username: redmine_user
     password: redmine_password
     encoding: utf8mb4
+
+mariadb_mysqld_cfg:
+  bind_address: 0.0.0.0
+
+mariadb_allow_connect_other_host: true
+

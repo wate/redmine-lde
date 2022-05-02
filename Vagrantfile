@@ -10,10 +10,6 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 8025, host: 8025
   config.vm.network "private_network", ip: "192.168.56.234"
 
-  # config.vm.provider "virtualbox" do |vb|
-  #   vb.gui = true
-  #   vb.memory = "1024"
-  # end
   config.vm.provision "ansible_local" do |ansible|
     ansible.become = true
     ansible.compatibility_mode = "2.0"

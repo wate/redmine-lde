@@ -95,6 +95,14 @@
             password: "{{ redmine_db_password }}"
             default_character_set: "{{ db_character_set }}"
       become: false
+    - name: create Redmine MariaDB users
+      mysql_user:
+        name: "{{ redmine_db_user }}"
+        password: "{{ redmine_db_password }}"
+        host: "%"
+        priv: "{{ redmine_db_name }}.*:ALL"
+        login_unix_socket: "{{ mariadb_unix_socket_path }}"
+      no_log: true
     - name: allow firewall port
       ufw:
         rule: allow
