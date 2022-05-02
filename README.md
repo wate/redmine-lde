@@ -8,7 +8,6 @@ redmine-lde
 * [VirtualBox](https://www.virtualbox.org/)
 * [Visual Studio Code](https://code.visualstudio.com/)
   * [Ruby](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
-  * [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
 
 利用方法
@@ -18,7 +17,6 @@ redmine-lde
 
 * `${LDE_ROOT}`：本リポジトリをcloneした直下のディレクトリを表しています
 * `${REDMINE_ROOT}`： cloneしたRedmineのルートディレクトリを表しています。
-
 
 ### 1. Redmineのソースコードを取得
 
@@ -37,14 +35,14 @@ cd ${REDMINE_ROOT}
 git checkout 4.2-stable
 ```
 
-### 2. 仮想マシンの作成/起動
+### 2. 仮想マシンの作成/起動します
 
 ```
 cd ${LDE_ROOT}
 vagrant up
 ```
 
-### 3. rdebug-ideを使ってRedmineを起動する
+### 3. rdebug-ideを使ってRedmineを起動します
 
 以下のコマンドを実行し、仮想マシンにログインします
 
@@ -58,7 +56,7 @@ vagrant ssh
 launch_rdebug-ide
 ```
 
-または、
+または、以下のコマンドを実行します。
 
 ```
 cd /vagrant/redmine
@@ -73,8 +71,8 @@ bundle exec rdebug-ide --host 0.0.0.0 --port 1234 -- bin/rails server -b 0.0.0.0
 
 ### 5. ステップ実行する
 
-任意の止めたい場所にブレイクポイントを入れ、以下のURLにアクセスし、
-該当箇所が通るようなコードを実行します。
+任意の止めたい場所にブレイクポイントを設定し、
+以下のURLにアクセスし該当箇所が通るように操作を行います。
 
 http://localhost:3000/
 
@@ -89,17 +87,19 @@ http://localhost:3000/
 
 ### 変更内容のパッチファイルの作成する
 
+変更を行った内容をパッチファイルとして出力したい場合は、以下のコマンドを実行します。
+
 ```
 cd ${REDMINE_ROOT}
 git diff > change_files.patch
 ```
 
-サーバー情報
+ローカル開発環境の情報
 -----------------------
 
 ### データベース情報
 
-Redmineのデータベース情報は以下の通りです
+データベースへの接続情報は以下の通りです
 
 * ホスト名：:`localhost`
 * データベース名：`redmine`
