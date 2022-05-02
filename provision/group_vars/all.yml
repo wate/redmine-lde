@@ -4,6 +4,7 @@ redmine_cfg:
       delivery_method: :sendmail
       sendmail_settings:
         location: /usr/local/bin/mhsendmail
+        arguments: ''
 
 redmine_db_cfg:
   production:
