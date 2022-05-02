@@ -1,24 +1,9 @@
-## --
-# Webサーバー(Nginx)の設定
-## --
-# バーチャルホストの設定
-nginx_vhosts:
-  - name: default
-    default: true
-    server_name: demo.redmine.local
-    upstream:
-      name: backend
-      content: |
-        server unix:{{ redmine_home }}/tmp/redmine.sock;
-    client_max_body_size: 0
-    locations:
-      - pattern: /
-        content: |
-          proxy_pass http://backend;
-          include proxy_params;
-
-dehydrated_cfg:
-  CA: https://acme-staging-v02.api.letsencrypt.org/directory
+redmine_cfg:
+  default:
+    email_delivery:
+      delivery_method: :sendmail
+      sendmail_settings:
+        location: /usr/local/bin/mhsendmail
 
 redmine_db_cfg:
   production:
