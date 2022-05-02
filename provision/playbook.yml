@@ -94,8 +94,18 @@
             user: "{{ redmine_db_user }}"
             password: "{{ redmine_db_password }}"
             default_character_set: "{{ db_character_set }}"
+        - name: create user script directory
+          file:
+            path: ~/bin
+            state: directory
+            mode: "0755"
+        - name: copy launch rdebug-ide script
+          copy:
+            src: launch_rdebug-ide
+            dest: ~/bin/launch_rdebug-ide
+            mode: "0755"
       become: false
-    - name: create Redmine MariaDB users
+    - name: create MariaDB users
       mysql_user:
         name: "{{ redmine_db_user }}"
         password: "{{ redmine_db_password }}"

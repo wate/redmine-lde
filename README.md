@@ -71,12 +71,36 @@ http://localhost:3000/
 
 ブレイクポイントで処理が止まり、変数の確認やコードの実行、ステップ実行が可能になります。
 
+デバッガの利用方法は以下のURL等を参考にしてください。
+
+[VSCodeで始めるデバッガ](https://www.bravesoft.co.jp/blog/archives/14082)
+
 パッチファイルの作成方法
 -------------------
 
-### 3．変更内容に対するパッチファイルの作成
+### 変更内容のパッチファイルの作成する
 
 ```
 cd ${REDMINE_ROOT}
 git diff > change_files.patch
 ```
+
+サーバー情報
+-----------------------
+
+### データベース情報
+
+* データベース名：`redmine`
+* ユーザー名：`redmine_user`
+* パスワード：`redmine_password`
+
+### データベース情報
+
+http://localhost:8025/
+
+
+参考URL
+-----------------------
+
+* [Ruby for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
+* [Debugger](https://github.com/rubyide/vscode-ruby/blob/main/docs/debugger.md)
