@@ -104,11 +104,12 @@
             path: ~/bin
             state: directory
             mode: "0755"
-        - name: copy launch rdebug-ide script
+        - name: copy user scripts
           copy:
-            src: launch_rdebug-ide
-            dest: ~/bin/launch_rdebug-ide
+            src: "{{ item }}"
+            dest: ~/bin/{{ item | basename }}
             mode: "0755"
+          loop: "{{ lookup('fileglob', 'files/scripts/*', wantlist=True) }}"
       become: false
     - name: create MariaDB users
       mysql_user:

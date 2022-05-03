@@ -9,7 +9,8 @@
 			"remoteWorkspaceRoot": "/vagrant/redmine",
 			"remoteHost": "localhost",
 			"remotePort": "1234",
-      "useBundle": true
+      "useBundle": true,
+      "console": "integratedTerminal"
     }
   ]
 }
