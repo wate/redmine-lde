@@ -3,6 +3,7 @@
   roles:
     - name: common
     - name: mariadb
+    - name: nodejs
     - name: tools
   tasks:
     - name: install ruby
