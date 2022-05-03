@@ -68,6 +68,12 @@
         RAILS_ENV: "{{ redmine_mode }}"
         REDMINE_LANG: "{{ redmine_lang }}"
     - block:
+        - name: set user git config
+          git_config:
+            name: "{{ item.name }}"
+            scope: global
+            value: "{{ item.value }}"
+          loop: "{{ user_git_config | default([])  }}"
         - name: set variables
           set_fact:
             redmine_db_host: "{{ redmine_db_cfg.development.host }}"
@@ -85,6 +91,11 @@
             path: ~/.bashrc
             regexp: '^export TBLS_DOC_PATH='
             line: export TBLS_DOC_PATH=/vagrant/dbdoc
+        - name: copy tbls setting
+          copy:
+            src: tbls.yml
+            dest: ~/tbls.yml
+            mode: "0644"
         - name: create mysql connection file
           ini_file:
             path: ~/.my.cnf
