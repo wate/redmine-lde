@@ -67,7 +67,7 @@ vagrant up
 vagrant ssh
 ```
 
-仮想マシンにSSHでログインし、以下のコマンドを実行します。
+仮想マシンにログインできたら、以下のコマンドを実行します。
 
 ```
 launch_rdebug-ide
