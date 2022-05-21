@@ -1,64 +1,73 @@
 - name: Deploy Redmine
   hosts: all
   roles:
-    - name: common
-    - name: mariadb
-    - name: nodejs
-    - name: tools
+    - role: common
+    - role: mariadb
+    - role: nodejs
+    - role: tools
   tasks:
     - name: install ruby
-      import_role:
+      ansible.builtin.import_role:
         name: redmine
         tasks_from: ruby
     - name: redmine database setting
-      import_role:
+      ansible.builtin.import_role:
         name: redmine
         tasks_from: database
-    - block:
+    - name: setup
+      block:
         - name: create Gemfile.local file
-          copy:
+          ansible.builtin.copy:
             src: Gemfile.local
             dest: /vagrant/redmine/Gemfile.local
             mode: "0644"
         - name: set redmine database config variable
-          set_fact:
+          ansible.builtin.set_fact:
             redmine_db_cfg:
               production: "{{ redmine_db_cfg.production }}"
               development: "{{ redmine_db_cfg.production }}"
         - name: create database config file
-          template:
+          ansible.builtin.template:
             src: database.yml.j2
             dest: "{{ redmine_home }}/config/database.yml"
             mode: "0644"
         - name: create Redmine config file
-          template:
+          ansible.builtin.template:
             src: configuration.yml.j2
             dest: "{{ redmine_home }}/config/configuration.yml"
             mode: "0644"
         - name: execute bundle update
-          command: bundle update
+          ansible.builtin.command: bundle update
           args:
             chdir: "{{ redmine_home }}"
+          tags:
+            - skip_ansible_lint
         - name: execute bundle install
           command: bundle install
           args:
             chdir: "{{ redmine_home }}"
+          tags:
+            - skip_ansible_lint
         - name: create secret token
-          command: bundle exec rake generate_secret_token
+          ansible.builtin.command: bundle exec rake generate_secret_token
           args:
             chdir: "{{ redmine_home }}"
             creates: "{{ redmine_home }}/config/initializers/secret_token.rb"
           register: generate_token_result
         - name: execute bundle exec rake db:migrate
-          command: bundle exec rake db:migrate
+          ansible.builtin.command: bundle exec rake db:migrate
           args:
             chdir: "{{ redmine_home }}"
+          tags:
+            - skip_ansible_lint
         - name: execute bundle exec rake redmine:plugins:migrate
-          command: bundle exec rake redmine:plugins:migrate
+          ansible.builtin.command: bundle exec rake redmine:plugins:migrate
           args:
             chdir: "{{ redmine_home }}"
+          tags:
+            - skip_ansible_lint
         - name: load default data
-          command: bundle exec rake redmine:load_default_data
+          ansible.builtin.command: bundle exec rake redmine:load_default_data
           args:
             chdir: "{{ redmine_home }}"
           when: generate_token_result is changed
@@ -67,7 +76,8 @@
       environment:
         RAILS_ENV: "{{ redmine_mode }}"
         REDMINE_LANG: "{{ redmine_lang }}"
-    - block:
+    - name: set user config
+      block:
         - name: set user git config
           git_config:
             name: "{{ item.name }}"
@@ -75,24 +85,24 @@
             value: "{{ item.value }}"
           loop: "{{ user_git_config | default([])  }}"
         - name: set variables
-          set_fact:
+          ansible.builtin.set_fact:
             redmine_db_host: "{{ redmine_db_cfg.development.host }}"
             redmine_db_name: "{{ redmine_db_cfg.development.database }}"
             redmine_db_user: "{{ redmine_db_cfg.development.username }}"
             redmine_db_password: "{{ redmine_db_cfg.development.password }}"
             db_character_set: "{{ mariadb_databases[0].encoding | default(mariadb_default_charset | default('utf8mb4')) }}"
         - name: set enviromnet variables(TBLS_DSN)
-          lineinfile:
+          ansible.builtin.lineinfile:
             path: ~/.bashrc
             regexp: '^export TBLS_DSN='
             line: export TBLS_DSN=my://{{ redmine_db_user }}:{{ redmine_db_password }}@{{ redmine_db_host }}:3306/{{ redmine_db_name }}
         - name: set enviromnet variables(TBLS_DOC_PATH)
-          lineinfile:
+          ansible.builtin.lineinfile:
             path: ~/.bashrc
             regexp: '^export TBLS_DOC_PATH='
             line: export TBLS_DOC_PATH=/vagrant/dbdoc
         - name: copy tbls setting
-          copy:
+          ansible.builtin.copy:
             src: tbls.yml
             dest: ~/tbls.yml
             mode: "0644"
@@ -111,12 +121,12 @@
             password: "{{ redmine_db_password }}"
             default_character_set: "{{ db_character_set }}"
         - name: create user script directory
-          file:
+          ansible.builtin.file:
             path: ~/bin
             state: directory
             mode: "0755"
         - name: copy user scripts
-          copy:
+          ansible.builtin.copy:
             src: "{{ item }}"
             dest: ~/bin/{{ item | basename }}
             mode: "0755"
