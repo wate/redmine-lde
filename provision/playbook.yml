@@ -4,7 +4,7 @@
     - name: restart rdebug-ide
       ansible.builtin.systemd:
         daemon_reload: true
-        name: redmine
+        name: rdebug-ide
         state: restarted
   roles:
     - role: common
@@ -88,7 +88,19 @@
           ansible.builtin.command: bundle exec rake redmine:load_default_data
           args:
             chdir: "{{ redmine_home }}"
-          when: generate_token_result is changed
+          when:
+            - generate_token_result is changed
+            - not redmine_skip_load_default_data
+        - name: create setting file directory
+          ansible.builtin.file:
+            path: "{{ redmine_home }}/tmp/import"
+            state: directory
+            mode: "0755"
+        - name: import Redmine setting
+          ansible.builtin.import_role:
+            name: redmine
+            tasks_from: import
+          when: generate_token_result is changed or redmine_reimport
       become: true
       become_user: "{{ redmine_user }}"
       environment:
