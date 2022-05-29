@@ -4,6 +4,7 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "wate/debian-11"
   # config.vm.box_check_update = false
+  config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.network "forwarded_port", guest: 3000, host: 3000
   config.vm.network "forwarded_port", guest: 1234, host: 1234
   config.vm.network "forwarded_port", guest: 3306, host: 3306

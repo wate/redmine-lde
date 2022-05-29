@@ -1,0 +1,8 @@
+---
+skip_list:
+  - 'meta-incorrect'
+  - 'meta-no-info'
+  - 'meta-no-tags'
+  - 'meta-video-links'
+warn_list:
+  - 'experimental'

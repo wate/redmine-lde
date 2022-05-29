@@ -10,6 +10,12 @@
 - src: https://github.com/wate/ansible-role-nodejs.git
   version: develop
   name: nodejs
+- src: https://github.com/wate/ansible-role-nginx.git
+  version: develop
+  name: nginx
+- src: https://github.com/wate/ansible-role-php.git
+  version: develop
+  name: php
 - src: https://github.com/wate/ansible-role-tools.git
   version: develop
   name: tools
