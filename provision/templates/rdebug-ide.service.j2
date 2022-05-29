@@ -1,0 +1,16 @@
+[Unit]
+Description=Redmine
+Requires=mariadb.service
+After=network.target mariadb.service
+
+[Service]
+Type=simple
+Restart=always
+User={{ redmine_user }}
+WorkingDirectory={{ redmine_home }}
+ExecStart=/usr/bin/bundle exec rdebug-ide --host 0.0.0.0 --port 1234 --dispatcher-port 1234 -- bin/rails server -b 0.0.0.0 -p 3000 -e {{ redmine_mode }}
+ExecStop=/bin/kill -TERM $MAINPID
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

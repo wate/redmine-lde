@@ -1,5 +1,11 @@
 - name: Deploy Redmine
   hosts: all
+  handlers:
+    - name: restart rdebug-ide
+      ansible.builtin.systemd:
+        daemon_reload: true
+        name: redmine
+        state: restarted
   roles:
     - role: common
     - role: mariadb
@@ -14,6 +20,18 @@
       ansible.builtin.import_role:
         name: redmine
         tasks_from: database
+    - name: create rdebug-ide systemd unit file
+      ansible.builtin.template:
+        src: rdebug-ide.service.j2
+        dest: /lib/systemd/system/rdebug-ide.service
+        mode: "0644"
+      notify: restart rdebug-ide
+    - name: rdebug-ide is active and enable on system startup
+      ansible.builtin.systemd:
+        daemon_reload: true
+        name: rdebug-ide
+        state: started
+        enabled: true
     - name: setup
       block:
         - name: create Gemfile.local file
