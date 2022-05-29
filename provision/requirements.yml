@@ -16,6 +16,9 @@
 - src: https://github.com/wate/ansible-role-php.git
   version: develop
   name: php
+- src: https://github.com/wate/ansible-role-redis.git
+  version: develop
+  name: redis
 - src: https://github.com/wate/ansible-role-tools.git
   version: develop
   name: tools
