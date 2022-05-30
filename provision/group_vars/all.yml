@@ -1,6 +1,6 @@
 web_root_dir: '/vagrant/web_root'
 
-php_version: '8.1'
+php_version: '7.4'
 
 php_packages:
   - php{{ php_version }}-common
@@ -24,6 +24,16 @@ php_packages:
   - php{{ php_version }}-apcu
   - php{{ php_version }}-fpm
   - php{{ php_version }}-redis
+
+# --------------
+# php.iniの初期値を上書きする項目
+# その他の設定値は、「provision/roles/php/defaults/main.yml」の「php_cfg」の項目を参照
+# --------------
+php_cfg: |
+  display_errors = On
+  memory_limit = 512M
+  date.timezone = Asia/Tokyo
+  sendmail_path =/usr/local/bin/mhsendmail
 
 redmine_cfg:
   default:

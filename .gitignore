@@ -37,7 +37,11 @@
 # Ignore code-workspaces
 *.code-workspace
 
-redmine/
-
 ### direnv ###
 .envrc
+.env
+
+### redmine and other source code ###
+redmine/
+web_root/
+
