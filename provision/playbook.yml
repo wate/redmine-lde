@@ -11,6 +11,12 @@
     - role: mariadb
     - role: nodejs
     - role: tools
+    - role: nginx
+      when: not without_php | default(false)
+    - role: php
+      when: not without_php | default(false)
+    - role: redis
+      when: not without_php | default(false)
   tasks:
     - name: install ruby
       ansible.builtin.import_role:
@@ -183,3 +189,22 @@
         - 1234
         # Mailhog
         - 8025
+  post_tasks:
+    - name: set other post task files
+      ansible.builtin.set_fact:
+        post_task_file: "{{ lookup('first_found', post_task_files, errors='ignore') }}"
+      vars:
+        post_task_files:
+          files:
+            - post_task.yml
+          paths:
+            - ..
+            - .
+    - name: execute post task
+      block:
+        - name: set variable for post task file base directory
+          ansible.builtin.set_fact:
+            post_task_base_dir: "{{ post_task_file | dirname }}"
+        - name: execute post task
+          ansible.builtin.include_tasks: "{{ post_task_file }}"
+      when: post_task_file | length > 0
