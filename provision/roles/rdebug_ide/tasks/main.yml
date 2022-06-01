@@ -1,0 +1,102 @@
+---
+- name: install ruby
+  ansible.builtin.import_role:
+    name: redmine
+    tasks_from: ruby
+- name: redmine database setting
+  ansible.builtin.import_role:
+    name: redmine
+    tasks_from: database
+- name: create rdebug-ide systemd unit file
+  ansible.builtin.template:
+    src: rdebug-ide.service.j2
+    dest: /lib/systemd/system/rdebug-ide.service
+    mode: "0644"
+  notify: restart rdebug-ide
+- name: rdebug-ide is active and enable on system startup
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: rdebug-ide
+    state: started
+    enabled: true
+- name: allow firewall port
+  ufw:
+    rule: allow
+    port: "{{ item | string }}"
+  loop:
+    # Rails Server
+    - 3000
+    # Ruby Remote Debug
+    - 1234
+- name: setup redmine
+  block:
+    - name: create Gemfile.local file
+      ansible.builtin.copy:
+        src: Gemfile.local
+        dest: "{{ redmine_home }}/Gemfile.local"
+        mode: "0644"
+    - name: set redmine database config variable
+      ansible.builtin.set_fact:
+        redmine_db_cfg:
+          production: "{{ redmine_db_cfg.production }}"
+          development: "{{ redmine_db_cfg.production }}"
+    - name: create database config file
+      ansible.builtin.template:
+        src: database.yml.j2
+        dest: "{{ redmine_home }}/config/database.yml"
+        mode: "0644"
+    - name: create Redmine config file
+      ansible.builtin.template:
+        src: configuration.yml.j2
+        dest: "{{ redmine_home }}/config/configuration.yml"
+        mode: "0644"
+    - name: execute bundle update
+      ansible.builtin.command: bundle update
+      args:
+        chdir: "{{ redmine_home }}"
+      tags:
+        - skip_ansible_lint
+    - name: execute bundle install
+      command: bundle install
+      args:
+        chdir: "{{ redmine_home }}"
+      tags:
+        - skip_ansible_lint
+    - name: create secret token
+      ansible.builtin.command: bundle exec rake generate_secret_token
+      args:
+        chdir: "{{ redmine_home }}"
+        creates: "{{ redmine_home }}/config/initializers/secret_token.rb"
+      register: generate_token_result
+    - name: execute bundle exec rake db:migrate
+      ansible.builtin.command: bundle exec rake db:migrate
+      args:
+        chdir: "{{ redmine_home }}"
+      tags:
+        - skip_ansible_lint
+    - name: execute bundle exec rake redmine:plugins:migrate
+      ansible.builtin.command: bundle exec rake redmine:plugins:migrate
+      args:
+        chdir: "{{ redmine_home }}"
+      tags:
+        - skip_ansible_lint
+    - name: load default data
+      ansible.builtin.command: bundle exec rake redmine:load_default_data
+      args:
+        chdir: "{{ redmine_home }}"
+      when: not redmine_skip_load_default_data
+    - name: create setting file directory
+      ansible.builtin.file:
+        path: "{{ redmine_home }}/tmp/import"
+        state: directory
+        mode: "0755"
+    - name: import Redmine setting
+      ansible.builtin.import_role:
+        name: redmine
+        tasks_from: import
+      when: generate_token_result is changed or redmine_reimport
+  become: true
+  become_user: "{{ redmine_user }}"
+  environment:
+    RAILS_ENV: "{{ redmine_mode }}"
+    REDMINE_LANG: "{{ redmine_lang }}"

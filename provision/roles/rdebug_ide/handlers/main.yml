@@ -1,0 +1,11 @@
+---
+- name: start rdebug-ide
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: rdebug-ide
+    state: started
+- name: restart rdebug-ide
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: rdebug-ide
+    state: restarted
