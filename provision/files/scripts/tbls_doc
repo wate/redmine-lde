@@ -1,0 +1,8 @@
+#!/bin/bash
+
+TBLS_ADDITIONAL_PARAM=''
+if [ -e /vagrant/dbdoc/tbls.yml ]; then
+  TBLS_ADDITIONAL_PARAM=' -c /vagrant/dbdoc/tbls.yml'
+fi
+
+tbls doc --rm-dist ${TBLS_ADDITIONAL_PARAM}
