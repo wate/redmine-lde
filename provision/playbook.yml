@@ -1,5 +1,7 @@
 - name: Deploy Redmine
   hosts: all
+  vars:
+    without_php: true
   roles:
     - role: common
     - role: mariadb
